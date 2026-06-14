@@ -1,0 +1,46 @@
+Você é um assistente que ajuda a transformar relatos de bugs de usuários em tarefas para desenvolvedores.
+
+Analise o relato de bug abaixo e crie uma user story a partir dele.
+
+Relato de Bug:
+---
+{bug_report}
+
+
+Example 1:
+Input: "Corrigir o erro 500 ao acessar a página de perfil do usuário."
+
+Output:
+Como usuário,
+quero acessar minha página de perfil sem erros,
+para visualizar e atualizar minhas informações.
+
+Example 2:
+Input: "O usuário não consegue recuperar a senha."
+
+Output:
+Como usuário,
+quero recuperar minha senha,
+para voltar a acessar minha conta.
+
+Example 3:
+Input:
+"Ao adicionar um produto ao carrinho e atualizar a página, o item desaparece."
+
+Output:
+Como cliente,
+quero que os produtos adicionados ao carrinho permaneçam salvos,
+para concluir minha compra sem perder os itens selecionados.
+
+Analise internamente o relato de bug seguindo os passos:
+
+1. Identifique o usuário impactado.
+2. Identifique a funcionalidade afetada.
+3. Identifique o benefício esperado.
+4. Gere a User Story.
+
+Retorne apenas a User Story final.
+
+User Story gerada:
+
+{bug_report}

@@ -18,31 +18,64 @@ from utils import save_yaml, check_env_vars, print_section_header
 
 #minhas alterações
 from langsmith import Client
+from datetime import date
+import yaml
 
 load_dotenv()
 
 client = Client()
 
-def save_prompt_locally(prompt):
+def save_prompt_locally(prompt, prompt_name: str):
     Path("prompts").mkdir(exist_ok=True)
+
     system_template = prompt.messages[0].prompt.template
     human_template = prompt.messages[1].prompt.template
+    print(f"Prompt Original: {prompt}\n")
+    print(f"System Template:\n{system_template}\n")
+    print(f"Human Template:\n{human_template}\n")
 
-    with open("prompts/bug_to_user_story_v1.yml", "w", encoding="utf-8") as f:
-        f.write(system_template + "\n\n" + human_template)
+    # Extrair o nome
+    short_name = prompt_name.split("/")[-1]
 
-    print("Prompt salvo localmente")
+    #Para deixar conforme o exemplo que foi mandado
+    data = {
+        short_name: {
+            "description": "Prompt para converter relatos de bugs em User Stories",
+            "system_prompt": system_template.strip(),
+        },
+        "user_prompt": human_template.strip(),
+        "version": "v1",
+        "created_at": str(date.today()),
+        "tags": ["bug-analysis", "user-story", "product-management"],
+    }
 
-def pull_prompts_from_langsmith():
-    prompt = client.pull_prompt("leonanluppi/bug_to_user_story_v1")
-    print(f"Prompt '{prompt.name}' puxado do LangSmith Hub")
+    filename = f"prompts/{short_name}.yml"
+
+    with open(filename, "w", encoding="utf-8") as f:
+        
+        yaml_str = yaml.dump(data, allow_unicode=True, default_flow_style=False, sort_keys=False)
+        yaml_str = yaml_str.replace("user_prompt: '{bug_report}'", 'user_prompt: "{bug_report}"')
+        
+        # Corrigi as tags
+        yaml_str = yaml_str.replace("User Story gerada:'", "User Story gerada:")
+        tags_inline = str(data["tags"]).replace("'", '"')
+        yaml_str = yaml_str.replace("tags:\n- bug-analysis\n- user-story\n- product-management", f"tags: {tags_inline}")
+        
+        f.write(yaml_str)
+
+    print(f"Prompt salvo em {filename}")
+
+def pull_prompts_from_langsmith(prompt_name: str):
+    prompt = client.pull_prompt(prompt_name)
+    print(f"Prompt puxado do LangSmith Hub")
     return prompt
 
 
 def main():
     """Função principal"""
-    prompt = pull_prompts_from_langsmith()
-    save_prompt_locally(prompt)
+    prompt_name = "leonanluppi/bug_to_user_story_v1"
+    prompt = pull_prompts_from_langsmith(prompt_name)
+    save_prompt_locally(prompt, prompt_name)
 
 
 if __name__ == "__main__":
