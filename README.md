@@ -326,3 +326,7 @@ python src/evaluate.py
 # Versão Aluno
 
 - [README_ALUNO.md](./README_ALUNO.md) — Guia para o aluno
+
+- NÃO ESTOU CONSEGUINDO DEIXAR UM PROMPT PUBLICO NO LANGSMITH, segue o a imagem abaixo publico, pode me chamar qualquer coisa:
+![Push e Avaliação](img_prompt_lang.png)
+
